@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/pkg/errors"
 
 	"github.com/P04KA/statistics/config"
 	"github.com/P04KA/statistics/internal/handler"
@@ -19,19 +18,18 @@ type App struct {
 }
 
 func New() *App {
-
 	cfg, err := config.LoadConfig(".")
 	if err != nil {
-		errors.Wrap(err, "fail cfg")
+		log.Printf("Failed to load config: %v", err) // Добавьте лог
 		return nil
-
 	}
 
 	conn, err := storage.GetConnect(cfg.DB.DBURL)
 	if err != nil {
-		errors.Wrap(err, "fail conn db")
+		log.Printf("Failed to connect to database: %v", err) // Добавьте лог
 		return nil
 	}
+
 	repo := repository.New(conn)
 	statsUC := usecase.NewStatsUseCase(repo)
 	statsHandler := handler.NewUserStatsServer(statsUC)
@@ -43,7 +41,7 @@ func New() *App {
 }
 
 func (a *App) GetStatsHandler() *handler.UserStatsServer {
-	if a == nil {
+	if a == nil || a.StatsHandler == nil { // Добавьте проверку на StatsHandler
 		log.Fatal("app dont have handler")
 		return nil
 	}
