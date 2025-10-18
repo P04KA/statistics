@@ -13,13 +13,13 @@ import (
 func main() {
 	application := app.New()
 	if application == nil {
-		log.Fatal("Application creation failed") // Добавьте эту проверку
+		log.Fatal("Application creation failed")
 	}
 	defer application.Close()
 
 	port := os.Getenv("5052")
 	if port == "" {
-		port = "5052" // Добавьте значение по умолчанию
+		port = "5052"
 	}
 
 	lis, err := net.Listen("tcp", ":"+port)
@@ -32,7 +32,7 @@ func main() {
 	statsHandler := application.GetStatsHandler()
 	stats.RegisterUserStatsServiceServer(grpcServer, statsHandler)
 
-	log.Printf("statistics start on port %s", port) // Добавьте порт в лог
+	log.Printf("statistics start on port %s", port)
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatal("fail:", err)
 	}

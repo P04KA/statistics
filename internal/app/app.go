@@ -20,13 +20,13 @@ type App struct {
 func New() *App {
 	cfg, err := config.LoadConfig(".")
 	if err != nil {
-		log.Printf("Failed to load config: %v", err) // Добавьте лог
+		log.Printf("Failed to load config: %v", err)
 		return nil
 	}
 
 	conn, err := storage.GetConnect(cfg.DB.DBURL)
 	if err != nil {
-		log.Printf("Failed to connect to database: %v", err) // Добавьте лог
+		log.Printf("Failed to connect to database: %v", err)
 		return nil
 	}
 
@@ -41,7 +41,7 @@ func New() *App {
 }
 
 func (a *App) GetStatsHandler() *handler.UserStatsServer {
-	if a == nil || a.StatsHandler == nil { // Добавьте проверку на StatsHandler
+	if a == nil || a.StatsHandler == nil {
 		log.Fatal("app dont have handler")
 		return nil
 	}
